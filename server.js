@@ -50,7 +50,7 @@ app.post("/sendInfo", (req, res) => {
 });
 
 app.get('/', function (req, res) {
-  res.send('<h1>Hello Node.js</h1>');
+  res.send('<h1>API is working fine. </h1>');
 });
 
 // app.get("/sendInfoGet", (req, res) => {
