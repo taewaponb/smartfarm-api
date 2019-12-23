@@ -49,22 +49,22 @@ app.post("/sendInfo", (req, res) => {
   });
 });
 
-app.get("/sendInfoGet", (req, res) => {
-  db.connect(url, function(err, db) {
-    if (err) {
-      console.log(String(err));
-    } else {
-      console.log("MongoDB is Connected");
-      db.db;
-      var dbo = db.db("smartfarmDB");
-      var myobj = { name: "DJAAAA" };
-      dbo.collection("users").insertOne(myobj, function(err, res) {
-        if (err) throw err;
-        db.close();
-      });
-    }
-  });
-  res.json({
-    status: "Insert Success"
-  });
-});
+// app.get("/sendInfoGet", (req, res) => {
+//   db.connect(url, function(err, db) {
+//     if (err) {
+//       console.log(String(err));
+//     } else {
+//       console.log("MongoDB is Connected");
+//       db.db;
+//       var dbo = db.db("smartfarmDB");
+//       var myobj = { name: "DJAAAA" };
+//       dbo.collection("users").insertOne(myobj, function(err, res) {
+//         if (err) throw err;
+//         db.close();
+//       });
+//     }
+//   });
+//   res.json({
+//     status: "Insert Success"
+//   });
+// });
