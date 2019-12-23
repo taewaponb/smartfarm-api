@@ -9,7 +9,7 @@ const cookie = require("cookie-session");
 const core = access({ maxAge: "8 hours", credentials: true, origin: true });
 
 const app = express();
-const port = process.env.PORT || 27017;
+const port = process.env.PORT || 4000;
 const version = "/api/v1/";
 const db = require("./database/db");
 
@@ -47,6 +47,10 @@ app.post("/sendInfo", (req, res) => {
   res.json({
     status: "Insert Success"
   });
+});
+
+app.get('/', function (req, res) {
+  res.send('<h1>Hello Node.js</h1>');
 });
 
 // app.get("/sendInfoGet", (req, res) => {
