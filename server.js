@@ -9,7 +9,7 @@ const cookie = require("cookie-session");
 const core = access({ maxAge: "8 hours", credentials: true, origin: true });
 
 const app = express();
-const port = process.env.PORT || 27017;
+const port = process.env.PORT || 4000;
 const version = "/api/v1/";
 const db = require("./database/db");
 
@@ -25,7 +25,7 @@ app.use(
 );
 
 app.listen(port, function() {
-  console.log("Server is running port: " + port);
+  console.log("Server is running port " + port);
 });
 
 app.post("/sendInfo", (req, res) => {
