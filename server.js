@@ -49,26 +49,22 @@ app.post("/sendInfo", (req, res) => {
   });
 });
 
-app.get('/', function (req, res) {
-  res.send('<h1>API is working fine. </h1>');
+app.post("/sendInfoSensor", (req, res) => {
+  const { farm, date, temp } = req.body;
+  db.connect(url, function(err, db) {
+    if (err) {
+      console.log(String(err));
+    } else {
+      db.db;
+      var dbo = db.db("sensorDB");
+      var myobj2 = { farm: farm, date: date, temp: temp };
+      dbo.collection("plantTemp").insertOne(myobj2, function(err, res) {
+        if (err) throw err;
+        db.close();
+      });
+    }
+  });
+  res.json({
+    status: "tempsInfo Success"
+  });
 });
-
-// app.get("/sendInfoGet", (req, res) => {
-//   db.connect(url, function(err, db) {
-//     if (err) {
-//       console.log(String(err));
-//     } else {
-//       console.log("MongoDB is Connected");
-//       db.db;
-//       var dbo = db.db("smartfarmDB");
-//       var myobj = { name: "DJAAAA" };
-//       dbo.collection("users").insertOne(myobj, function(err, res) {
-//         if (err) throw err;
-//         db.close();
-//       });
-//     }
-//   });
-//   res.json({
-//     status: "Insert Success"
-//   });
-// });
