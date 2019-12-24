@@ -68,3 +68,5 @@ app.post("/sendInfoSensor", (req, res) => {
     status: "tempsInfo Success"
   });
 });
+
+app.get("/testPython", (req, res) => res.send("Hellp from Python"));
