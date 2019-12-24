@@ -58,7 +58,7 @@ app.post("/sendInfoSensor", (req, res) => {
       db.db;
       var dbo = db.db("sensorDB");
       var myobj2 = { farm: farm, date: date, temp: temp };
-      dbo.collection("plantTemp").insertOne(myobj2, function(err, res) {
+      dbo.collection("plantTemps").insertOne(myobj2, function(err, res) {
         if (err) throw err;
         db.close();
       });
