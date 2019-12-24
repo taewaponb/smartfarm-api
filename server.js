@@ -50,14 +50,14 @@ app.post("/sendInfo", (req, res) => {
 });
 
 app.post("/sendInfoSensor", (req, res) => {
-  const { farm, date, temp } = req.body;
+  const { farm, date, temp, mois } = req.body;
   db.connect(url, function(err, db) {
     if (err) {
       console.log(String(err));
     } else {
       db.db;
       var dbo = db.db("sensorDB");
-      var myobj2 = { farm: farm, date: date, temp: temp };
+      var myobj2 = { farm: farm, date: date, temp: temp, mois };
       dbo.collection("plantTemps").insertOne(myobj2, function(err, res) {
         if (err) throw err;
         db.close();
