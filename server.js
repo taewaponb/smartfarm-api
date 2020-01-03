@@ -69,6 +69,6 @@ app.post("/sendInfoSensor", (req, res) => {
   });
 });
 
-app.get('/', (req, res) => res.end(`API is working fine.`));
+app.get('/', (req, res) => res.end(`API is working fine. (Version 0.1.1)`));
 
 app.get("/testPython", (req, res) => res.send("Hello from Python"));
