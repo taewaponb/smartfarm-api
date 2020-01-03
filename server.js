@@ -45,7 +45,7 @@ app.post("/sendInfo", (req, res) => {
     }
   });
   res.json({
-    status: "Insert Success"
+    status: "Successful!"
   });
 });
 
@@ -58,15 +58,17 @@ app.post("/sendInfoSensor", (req, res) => {
       db.db;
       var dbo = db.db("sensorDB");
       var myobj2 = { farm: farm, date: date, temp: temp, mois };
-      dbo.collection("plantTemps").insertOne(myobj2, function(err, res) {
+      dbo.collection("sersor").insertOne(myobj2, function(err, res) {
         if (err) throw err;
         db.close();
       });
     }
   });
   res.json({
-    status: "tempsInfo Success"
+    status: "Successful!"
   });
 });
 
-app.get("/testPython", (req, res) => res.send("Hellp from Python"));
+app.get('/', (req, res) => res.end(`API is working fine.`));
+
+app.get("/testPython", (req, res) => res.send("Hello from Python"));
