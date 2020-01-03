@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 
-var url = "mongodb://127.0.0.1:27017/";
+var url = "mongodb://45.77.39.58:27017/";
 const access = require("access-control");
 const cookie = require("cookie-session");
 const core = access({ maxAge: "8 hours", credentials: true, origin: true });
