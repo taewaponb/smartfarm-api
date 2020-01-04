@@ -4,8 +4,10 @@ This is a repository to keep api for smartfarm chatbot
 -------
 
 ## Demo
-* [GET /products](https://node-api-101.herokuapp.com/products)
-* [GET /products/:id](https://node-api-101.herokuapp.com/products/:id)
+* [GET /users](https://line-smartfarm-api.herokuapp.com/users)
+* [GET /users/:id](https://line-smartfarm-api.herokuapp.com/users/:id)
+* [GET /sensors](https://line-smartfarm-api.herokuapp.com/sensors)
+* [GET /sensors/:id](https://line-smartfarm-api.herokuapp.com/sensors/:id)
 
 ## Usage
 ```
