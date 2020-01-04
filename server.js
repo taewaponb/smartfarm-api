@@ -10,7 +10,6 @@ const core = access({ maxAge: "8 hours", credentials: true, origin: true });
 
 const app = express();
 const port = process.env.PORT || 4000;
-const version = "/api/v1/";
 const db = require("./database/db");
 
 app.use(core);
@@ -69,6 +68,6 @@ app.post("/sendInfoSensor", (req, res) => {
   });
 });
 
-app.get('/', (req, res) => res.end(`API is working fine. (Version 0.1.3)`));
+app.get('/', (req, res) => res.end(`API is working fine. (Version 0.1.4)`));
 
 app.get("/testPython", (req, res) => res.send("Hello from Python"));
