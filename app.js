@@ -57,18 +57,6 @@ app.post('/users', async(req, res) => {
     }
 })
 
-// post a report data from line
-app.post('/users/data', async(req, res) =>{
-    const payload = req.body
-    try{
-        const user = new User(payload)
-        await user.save()
-        res.status(201).end()
-    }  catch (error) {
-        res.status(400).json(error)
-    }
-})
-
 // get a list of sensors data
 app.get('/sensors', async(req, res) => {
     const sensors = await Sensor.find()
