@@ -1,6 +1,11 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
+const plantSchema = new Schema({
+    plant: String,
+    level: Number
+}, { timestamps: true, versionKey: false })
+
 // schema for users
 const userSchema = new Schema({
     uid: String,
@@ -8,11 +13,6 @@ const userSchema = new Schema({
     tel: String,
     plant: [plantSchema]
 }, { timestamps: false, versionKey: false })
-
-const plantSchema = new Schema({
-    plant: String,
-    level: Number
-}, { timestamps: true, versionKey: false })
 
 const UserModel = mongoose.model('User', userSchema)
 
