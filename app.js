@@ -76,7 +76,7 @@ app.post('/users', async(req, res) => {
                 console.log('This line UID is new.');
                 user.save()
                     .then(result => {
-                        console.log(result);
+                        // console.log(result);
                         pushMessage('registered');
                         res.status(201).end()
                     })
@@ -113,7 +113,7 @@ app.post('/users', async(req, res) => {
                     text: 'สามารถเริ่มใช้งานระบบการรายงานผลได้โดยกดเลือกที่เมนูด้านล่างค่ะ 👇😊'
                 }
             ];
-            client.pushMessage(req.body.line_id, message)
+            client.pushMessage(req.body.uid, message)
                 .then(() => {
                     console.log('push message done!')
                 })
