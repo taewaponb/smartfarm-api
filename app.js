@@ -57,18 +57,10 @@ app.post('/users', async(req, res) => {
     if (uid == null || uid == "") {
         res.json({
             status: 'error',
-            message: 'Line UID not found! (error from if)'
+            message: 'Line UID not found! please re-enter.'
         });
         return null;
     }
-    
-    // try {
-    //     const user = new User(payload)
-    //     await user.save()
-    //     res.status(201).end()
-    // } catch (error) {
-    //     res.status(400).json(error)
-    // }
 
     // check if account is exists
     User.find({ uid: req.body.uid })
@@ -84,10 +76,13 @@ app.post('/users', async(req, res) => {
                     })
                     .catch(err => {
                         console.log(err);
+                        console.log("Duplicated UID catch");
                         res.status(400).json(error)
                     });
             }
             else {
+                console.log("Duplicated UID else")
+                pushMessage('duplicated');
                 res.json({
                     status: '0000',
                     message: 'This line UID is already exists.'
@@ -108,7 +103,7 @@ app.post('/users', async(req, res) => {
             const message = [
                 {
                     type: 'text',
-                    text: 'สวัสดีค่ะคุณ ' + req.body.name
+                    text: 'สวัสดีค่ะคุณ ' + req.body.name + '✨'
                 },
                 {
                     type: 'text',
@@ -117,7 +112,7 @@ app.post('/users', async(req, res) => {
             ];
             client.pushMessage(req.body.uid, message)
                 .then(() => {
-                    console.log('push message done!')
+                    console.log('Registed!')
                 })
                 .catch((err) => {
                     console.log(err);
