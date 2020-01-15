@@ -67,39 +67,30 @@ app.post('/users', async(req, res) => {
         .exec()
         .then(docs => {
             if (docs == "") {
-                console.log('This line UID is new.');
+                console.log('New UID detected!');
                 user.save()
                     .then(result => {
                         // console.log(result);
                         pushMessage('registered');
                         res.status(201).end()
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         console.log(err);
-                        console.log("Duplicated UID catch");
-                        res.status(400).json(error)
                     });
             }
             else {
-                console.log("Duplicated UID else")
+                console.log("Duplicated UID detected!")
                 pushMessage('duplicated');
-                res.json({
-                    status: '0000',
-                    message: 'This line UID is already exists.'
-                });
             }
-        }).catch(err => {
-            console.log(err)
-            res.json({
-                message: 'Line UID not found! (error from catch)',
-            });
+        }).catch((err) => {
+            console.log(err);
         });
 
     function pushMessage(state) {
+        const client = new line.Client({
+            channelAccessToken: 'ZtOCZqPA/UVGqKG8c65zz2/WtE3JsQ8dQv6FfZG/UG3MCLRhbeE+OP2Iw3pxHO6Fmarp0Q3rGGWGRIshFZ3XrD2IFB/MZiazqKA6pxPveyLigi0diBWudOy8J7Enef+TszYX2kgZfUSbc2RAYanaw1GUYhWQfeY8sLGRXgo3xvw='
+        });
         if (state == 'registered') {
-            const client = new line.Client({
-                channelAccessToken: 'ZtOCZqPA/UVGqKG8c65zz2/WtE3JsQ8dQv6FfZG/UG3MCLRhbeE+OP2Iw3pxHO6Fmarp0Q3rGGWGRIshFZ3XrD2IFB/MZiazqKA6pxPveyLigi0diBWudOy8J7Enef+TszYX2kgZfUSbc2RAYanaw1GUYhWQfeY8sLGRXgo3xvw='
-            });
             const message = [
                 {
                     type: 'text',
@@ -112,7 +103,25 @@ app.post('/users', async(req, res) => {
             ];
             client.pushMessage(req.body.uid, message)
                 .then(() => {
-                    console.log('Registed!')
+                    console.log('New user added!')
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else if (state == 'duplicated') {
+            const message = [
+                {
+                    type: 'text',
+                    text: 'ขออภัยค่ะคุณ ' + req.body.name + ' ได้ทำการลงทะเบียนเรียบร้อยแล้วค่ะ'
+                },
+                {
+                    type: 'text',
+                    text: 'สามารถเริ่มใช้งานระบบการรายงานผลได้โดยกดเลือกที่เมนูด้านล่างค่ะ 👇😊'
+                }
+            ];
+            client.pushMessage(req.body.uid, message)
+                .then(() => {
+                    console.log('Already registered!')
                 })
                 .catch((err) => {
                     console.log(err);
