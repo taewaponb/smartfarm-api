@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const line = require('@line/bot-sdk');
@@ -7,10 +6,13 @@ const line = require('@line/bot-sdk');
 const User = require('./models/user')
 const Sensor = require('./models/sensor')
 
+const app = express();
 dotenv.config()
 
+// env
 const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
+const LINE_TOKEN = process.env.LINE_TOKEN
 
 mongoose.connect(DB_URL, { useUnifiedTopology: true })
 mongoose.connection.on('error', err => {
@@ -88,7 +90,7 @@ app.post('/users', async(req, res) => {
 
     function pushMessage(state) {
         const client = new line.Client({
-            channelAccessToken: 'ZtOCZqPA/UVGqKG8c65zz2/WtE3JsQ8dQv6FfZG/UG3MCLRhbeE+OP2Iw3pxHO6Fmarp0Q3rGGWGRIshFZ3XrD2IFB/MZiazqKA6pxPveyLigi0diBWudOy8J7Enef+TszYX2kgZfUSbc2RAYanaw1GUYhWQfeY8sLGRXgo3xvw='
+            channelAccessToken: LINE_TOKEN
         });
         if (state == 'registered') {
             const message = [
@@ -112,7 +114,7 @@ app.post('/users', async(req, res) => {
             const message = [
                 {
                     type: 'text',
-                    text: 'ขออภัยค่ะคุณ ' + req.body.name + ' ได้ทำการลงทะเบียนเรียบร้อยแล้วค่ะ'
+                    text: 'ขออภัยค่ะ คุณได้ทำการลงทะเบียนเรียบร้อยแล้วค่ะ'
                 },
                 {
                     type: 'text',
