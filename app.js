@@ -47,13 +47,80 @@ app.get('/users', async(req, res) => {
 
 // post a new user (register)
 app.post('/users', async(req, res) => {
+    const uid = req.body.uid
     const payload = req.body
-    try {
-        const user = new User(payload)
-        await user.save()
-        res.status(201).end()
-    } catch (error) {
-        res.status(400).json(error)
+    const user = new User(payload)
+
+    // check for blank line uid
+    if (uid == null || uid == "") {
+        res.json({
+            status: 'error',
+            message: 'Line UID not found! (error from if)'
+        });
+        return null;
+    }
+    
+    // try {
+    //     const user = new User(payload)
+    //     await user.save()
+    //     res.status(201).end()
+    // } catch (error) {
+    //     res.status(400).json(error)
+    // }
+
+    // check if account is exists
+    User.find({ uid: req.body.uid })
+        .exec()
+        .then(docs => {
+            if (docs == "") {
+                console.log('This line UID is new.');
+                user.save()
+                    .then(result => {
+                        console.log(result);
+                        pushMessage('registered');
+                        res.status(201).end()
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(400).json(error)
+                    });
+            }
+            else {
+                res.json({
+                    status: '0000',
+                    message: 'This line UID is already exists.'
+                });
+            }
+        }).catch(err => {
+            console.log(err)
+            res.json({
+                message: 'Line UID not found! (error from catch)',
+            });
+        });
+
+    function pushMessage(state) {
+        if (state == 'registered') {
+            const client = new line.Client({
+                channelAccessToken: 'ZtOCZqPA/UVGqKG8c65zz2/WtE3JsQ8dQv6FfZG/UG3MCLRhbeE+OP2Iw3pxHO6Fmarp0Q3rGGWGRIshFZ3XrD2IFB/MZiazqKA6pxPveyLigi0diBWudOy8J7Enef+TszYX2kgZfUSbc2RAYanaw1GUYhWQfeY8sLGRXgo3xvw='
+            });
+            const message = [
+                {
+                    type: 'text',
+                    text: 'สวัสดีค่ะคุณ ' + req.body.name
+                },
+                {
+                    type: 'text',
+                    text: 'สามารถเริ่มใช้งานระบบการรายงานผลได้โดยกดเลือกที่เมนูด้านล่างค่ะ 👇😊'
+                }
+            ];
+            client.pushMessage(req.body.line_id, message)
+                .then(() => {
+                    console.log('push message done!')
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }
 })
 
