@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
+const line = require('@line/bot-sdk');
+
 const User = require('./models/user')
 const Sensor = require('./models/sensor')
 
