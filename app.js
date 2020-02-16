@@ -57,7 +57,9 @@ app.post('/users', async(req, res) => {
 
     // check for blank line uid
     if (uid === null || uid === "") {
-        res.status(400).json(error)
+        res.status(400).json({
+            message: 'uid not found.',
+        });
         return null
     }
 
@@ -93,7 +95,7 @@ app.post('/users', async(req, res) => {
             const message = [
                 {
                     type: 'text',
-                    text: 'สวัสดีค่ะ ' + req.body.name + '✨'
+                    text: 'สวัสดีค่ะคุณ ' + req.body.name + '✨'
                 },
                 {
                     type: 'text',
@@ -111,7 +113,7 @@ app.post('/users', async(req, res) => {
             const message = [
                 {
                     type: 'text',
-                    text: 'ขออภัยค่ะ คุณได้ทำการลงทะเบียนเรียบร้อยแล้วค่ะ'
+                    text: 'ขออภัยค่ะ คุณเคยทำการลงทะเบียนแล้วค่ะ'
                 },
                 {
                     type: 'text',
