@@ -6,6 +6,8 @@ const plantSchema = new Schema({
     level: Number
 }, { timestamps: true, versionKey: false })
 
+รวมๆไปเลยก็ได้นะ
+
 // schema for users
 const userSchema = new Schema({
     uid: String,
