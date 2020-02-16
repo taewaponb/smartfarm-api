@@ -60,9 +60,9 @@ app.post('/users', async(req, res) => {
         res.json({
             status: 'error',
             message: 'Line UID not found! please re-enter.'
-        });
-        res.status(400);
-        return null;
+        })
+        res.status(400).json(error)
+        return null
     }
 
     // check if account is exists
@@ -78,12 +78,12 @@ app.post('/users', async(req, res) => {
                         res.status(201).end()
                     })
                     .catch((err) => {
-                        console.log(err);
+                        console.log(err)
                     });
             }
             else {
                 console.log("Duplicated UID detected!")
-                pushMessage('duplicated');
+                pushMessage('duplicated')
             }
         }).catch((err) => {
             console.log(err);
