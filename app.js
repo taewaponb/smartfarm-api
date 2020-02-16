@@ -57,11 +57,9 @@ app.post('/users', async(req, res) => {
 
     // check for blank line uid
     if (uid == null || uid == "") {
-        res.json({
-            status: 'error',
-            message: 'Line UID not found! please re-enter.'
-        })
-        res.status(400).json(error)
+        res.status(400).json({
+            message: 'line id not found.',
+        });
         return null
     }
 
