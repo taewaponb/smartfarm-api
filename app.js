@@ -56,8 +56,8 @@ app.post('/users', async(req, res) => {
     const user = new User(payload)
 
     // check for blank line uid
-    if (uid == null || uid == "") {
-        res.status(400).end()
+    if (uid === null || uid === "") {
+        res.status(400).json(error)
         return null
     }
 
