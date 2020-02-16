@@ -61,7 +61,7 @@ app.post('/users', async(req, res) => {
             status: 'error',
             message: 'Line UID not found! please re-enter.'
         });
-        res.status(400).json(users)
+        res.status(400);
         return null;
     }
 
