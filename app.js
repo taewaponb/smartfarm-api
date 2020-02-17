@@ -1,18 +1,21 @@
 const express = require("express");
-const dotenv = require("dotenv")
-const mongoose = require("mongoose")
+const dotenv = require("dotenv");
 const line = require('@line/bot-sdk');
+const mongoose = require("mongoose");
 
-const User = require('./models/user')
-const Sensor = require('./models/sensor')
+// models
+const userCollection = require('./models/user')
 
-const app = express();
-dotenv.config()
+// routes
+const verifyRoutes = require("./routes/verify.js");
 
 // env
+dotenv.config()
 const PORT = process.env.PORT
 const DB_URL = process.env.DB_URL
 const LINE_TOKEN = process.env.LINE_TOKEN
+
+const app = express();
 
 mongoose.connect(DB_URL, { useUnifiedTopology: true })
 mongoose.connection.on('error', err => {
@@ -45,7 +48,7 @@ app.listen(PORT, () => {
 
 // get list of users
 app.get('/users', async(req, res) => {
-    const users = await User.find()
+    const users = await userCollection.find()
     res.status(200).json(users)
 })
 
@@ -53,7 +56,7 @@ app.get('/users', async(req, res) => {
 app.post('/users', async(req, res) => {
     const uid = req.body.uid
     const payload = req.body
-    const user = new User(payload)
+    const user = new userCollection(payload)
 
     // check for blank line uid
     if (uid === null || uid === "") {
@@ -62,7 +65,7 @@ app.post('/users', async(req, res) => {
     }
 
     // check if account is exists
-    User.find({ uid: req.body.uid })
+    userCollection.find({ uid: req.body.uid })
         .exec()
         .then(docs => {
             if (docs == "") {
@@ -130,3 +133,5 @@ app.post('/users', async(req, res) => {
         }
     }
 })
+
+app.use('/verify', verifyRoutes );
