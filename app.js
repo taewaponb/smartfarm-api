@@ -18,7 +18,7 @@ const LINE_TOKEN = process.env.LINE_TOKEN
 
 const app = express();
 
-mongoose.connect(DB_URL, { useUnifiedTopology: true })
+mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
 mongoose.connection.on('error', err => {
     console.error('MongoDB error', err)
 })
