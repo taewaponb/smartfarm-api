@@ -57,9 +57,7 @@ app.post('/users', async(req, res) => {
 
     // check for blank line uid
     if (uid === null || uid === "") {
-        res.status(400).json({
-            message: 'uid not found.',
-        });
+        res.status(400).end();
         return null
     }
 
@@ -82,11 +80,13 @@ app.post('/users', async(req, res) => {
             else {
                 console.log("Duplicated UID detected!")
                 pushMessage('duplicated')
+                res.status(400).end()
             }
         }).catch((err) => {
             console.log(err);
         });
 
+    // push message if register success
     function pushMessage(state) {
         const client = new line.Client({
             channelAccessToken: LINE_TOKEN
@@ -128,23 +128,5 @@ app.post('/users', async(req, res) => {
                     console.log(err);
                 });
         }
-    }
-})
-
-// get a list of sensors data
-app.get('/sensors', async(req, res) => {
-    const sensors = await Sensor.find()
-    res.status(200).json(sensors)
-})
-
-// post a data of sensor
-app.post('/sensors', async(req, res) => {
-    const payload = req.body
-    try {
-        const sensors = new Sensor(payload)
-        await sensors.save()
-        res.status(201).end()
-    } catch (error) {
-        res.status(400).json(error)
     }
 })
