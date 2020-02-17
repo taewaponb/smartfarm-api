@@ -12,7 +12,7 @@ const DB_URL = process.env.DB_URL;
 const LINE_TOKEN = process.env.LINE_TOKEN;
 
 router.post("/", (req, res, next) => {
-  userCollection.find({ uid: req.body.uid,name: req.body.name }, function(err, docs) {
+  userCollection.find({ uid: req.body.uid }, function(err, docs) {
     if ((docs == "") | (docs == null)) {
       console.log("New UID detected!");
       res.status(200).send("true");
