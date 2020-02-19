@@ -18,7 +18,7 @@ router.post("/", (req, res) => {
 
   // check for blank line uid
   if (uid === null || uid === "") {
-    res.status(400).send('Duplicated UID detected!');
+    res.status(400).send('LINE UID not found! Please enter LINE UID.');
     return null;
   }
 
