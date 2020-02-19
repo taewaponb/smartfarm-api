@@ -3,16 +3,13 @@ const router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 router.post("/", (req, res) => {
-  console.log("POST: /");
-  console.log("Body: ", req.body);
-
   //Create an instance
   const agent = new WebhookClient({
     request: req,
     response: res
   });
 
-  //Test get value of WebhookClient
+  console.log("Body: ", req.body);
   console.log("agentVersion: " + agent.agentVersion);
   console.log("intent: " + agent.intent);
   console.log("locale: " + agent.locale);
@@ -21,12 +18,13 @@ router.post("/", (req, res) => {
 
   //Function Location
   function webhookTest(agent) {
-    agent.add("Webhook is fine. Thanks for asking :D");
+    agent.add("Webhook is fine ✅. Thanks for asking 🤗 ");
+    agent.add("Webhook is working fine ✅. you're good to go ✌️");
   }
 
   // Run the proper function handler based on the matched Dialogflow intent name
   let intentMap = new Map();
-  intentMap.set("Webhook", webhookTest); // "Location" is once Intent Name of Dialogflow Agent
+  intentMap.set("Webhook", webhookTest);
   agent.handleRequest(intentMap);
 });
 
