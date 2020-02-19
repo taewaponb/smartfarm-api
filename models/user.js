@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// schema for plant
 const plantSchema = new Schema(
   {
     farm: Number,

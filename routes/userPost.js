@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
           .then(result => {
             // console.log(result);
             pushMessage("registered");
-            res.status(201).send("Register Success!")
+            res.status(201).send("Register Success!");
           })
           .catch(err => {
             console.log(err);
