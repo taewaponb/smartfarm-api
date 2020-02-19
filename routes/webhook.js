@@ -21,9 +21,15 @@ router.post("/", (req, res) => {
     agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
   }
 
+  function submit(agent) {
+    agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
+    agent.add("หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู \"รายงานผลการเพาะปลูก\" หรือพิมพ์ \"รายงานผล\" ได้เลยค่ะ ✨");
+  }
+
   // Run the proper function handler based on the matched Dialogflow intent name
   let intentMap = new Map();
   intentMap.set("Webhook", webhookTest);
+  intentMap.set("GOSFWHLY", submit)
   agent.handleRequest(intentMap);
 });
 
