@@ -18,8 +18,7 @@ router.post("/", (req, res) => {
 
   //Function Location
   function webhookTest(agent) {
-    agent.add("Webhook is fine ✅. Thanks for asking 🤗 ");
-    agent.add("Webhook is working fine ✅. you're good to go ✌️");
+    agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
   }
 
   // Run the proper function handler based on the matched Dialogflow intent name
