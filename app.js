@@ -52,8 +52,8 @@ app.use((req, res, next) => {
 app.get('/', (res) => res.end(`API is working fine.`));
 
 // post every 29 minute to prevent heroku from sleeping.
-cron.schedule('*/1 * * * *', () => {
-  console.log('running a task every one minutes');
+cron.schedule('*/29 * * * *', () => {
+  console.log('running a task every 29 minutes');
   app.post('/');
 });
 
