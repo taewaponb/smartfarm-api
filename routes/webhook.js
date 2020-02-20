@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 
-const dataCollection = require("../models/dataModel");
-
 router.post("/", (req, res, next) => {
   //Create an instance
   const agent = new WebhookClient({
@@ -39,15 +37,15 @@ router.post("/", (req, res, next) => {
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
 
-    dataCollection
-      .findOne({ uid: UID })
-      .exec()
-      .then(docs => {
-        dataCollection.save( { item: "book", qty: 40 } )
-      })
-      .catch(err => {
+    // dataCollection
+    //   .findOne({ uid: UID })
+    //   .exec()
+    //   .then(docs => {
+    //     dataCollection.save( { item: "book", qty: 40 } )
+    //   })
+    //   .catch(err => {
 
-      });
+    //   });
 
     agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
     agent.add(
