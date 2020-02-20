@@ -27,12 +27,6 @@ const registerRoute = require("./routes/userPost");
 const webhookRoute = require("./routes/webhook");
 const getUsersRoute = require("./routes/userGet");
 
-app.use('/verify', verifyRoute);
-app.use('/users', registerRoute);
-app.use('/users', getUsersRoute)
-app.use('/webhook', webhookRoute);
-
-
 mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
 mongoose.connection.on('error', err => {
     console.error('MongoDB error', err)
@@ -40,17 +34,17 @@ mongoose.connection.on('error', err => {
 
 // copy from chompoo (Thank!)
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    if (req.method === "OPTIONS") {
-      res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-      return res.status(200).json({});
-    }
-    next();
-})
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
 
 // check if API is now working
 app.get('/', (req, res, next) => {
@@ -68,3 +62,8 @@ cron.schedule('*/29 * * * *', () => {
 app.listen(PORT, () => {
     console.log(`API is working fine. Running local on port ${PORT}`);
 });
+
+app.use('/verify', verifyRoute);
+app.use('/users', registerRoute);
+app.use('/users', getUsersRoute)
+app.use('/webhook', webhookRoute);
