@@ -18,28 +18,24 @@ router.post("/", (req, res, next) => {
 
   // test webhook call
   function webhookTest(agent) {
+    let data = req.body.originalDetectIntentRequest;
     agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
-    console.log("User ID: " + req.body.originalDetectIntentRequest.payload.data.source.userId);
+    if (data.source == undefined) {
+      agent.add("Cannot get user LINE UID.");
+    } else {
+      agent.add("User using bot from: " + data.source);
+      agent.add("User ID: " + data.payload.data.source.userId);
+    }
   }
 
   // submit function for plant report
   function submit(agent) {
-    // get report data from dialogflow parameters.
+    // define a variable to keep a data before submit
+    let UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
     let farm = agent.parameters["farm"];
     let water = agent.parameters["water"];
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
-
-    agent.add(
-      "ฟาร์มที่" +
-        farm +
-        "\nwater" +
-        water +
-        "\nheight" +
-        height +
-        "\nleaf" +
-        leaf
-    );
 
     agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
     agent.add(
