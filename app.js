@@ -5,6 +5,7 @@ const line = require('@line/bot-sdk');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+const cron = require('node-cron');
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -49,6 +50,12 @@ app.use((req, res, next) => {
 
 // check if API is now working
 app.get('/', (res) => res.end(`API is working fine.`));
+
+// post every 29 minute to prevent heroku from sleeping.
+cron.schedule('*/1 * * * *', () => {
+  console.log('running a task every one minutes');
+  app.post('/');
+});
 
 // use to display port in console (running on local)
 app.listen(PORT, () => {
