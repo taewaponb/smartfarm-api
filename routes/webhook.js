@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   //Create an instance
   const agent = new WebhookClient({
     request: req,
@@ -10,16 +10,16 @@ router.post("/", (req, res) => {
   });
 
   console.log("Body: ", req.body);
-  console.log("agentVersion: " + agent.agentVersion);
-  console.log("intent: " + agent.intent);
-  console.log("locale: " + agent.locale);
-  console.log("query: ", agent.query);
-  console.log("session: ", agent.session);
+  // console.log("agentVersion: " + agent.agentVersion);
+  // console.log("intent: " + agent.intent);
+  // console.log("locale: " + agent.locale);
+  // console.log("query: ", agent.query);
+  // console.log("session: ", agent.session);
 
   // test webhook call
   function webhookTest(agent) {
     agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
-    console.log("LINE UID: " + req.body.originalDetectIntentRequest.source);
+    console.log("User ID: " + req.body.originalDetectIntentRequest.payload.data.source.userId);
   }
 
   // submit function for plant report

@@ -24,10 +24,13 @@ const userCollection = require('./models/user')
 const verifyRoute = require("./routes/verify");
 const registerRoute = require("./routes/userPost");
 const webhookRoute = require("./routes/webhook");
+const getUsersRoute = require("./routes/userGet");
 
 app.use('/verify', verifyRoute);
 app.use('/users', registerRoute);
+app.use('/users', getUsersRoute)
 app.use('/webhook', webhookRoute);
+
 
 mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true })
 mongoose.connection.on('error', err => {
@@ -49,12 +52,12 @@ app.use((req, res, next) => {
 })
 
 // check if API is now working
-app.get('/', (res) => res.end(`API is working fine.`));
+app.get('/', (req, res, next) => res.end(`API is working fine.`));
 
 // post every 29 minute to prevent heroku from sleeping.
 cron.schedule('*/29 * * * *', () => {
   console.log('running a task every 29 minutes');
-  app.post('/');
+  app.get('/');
 });
 
 // use to display port in console (running on local)

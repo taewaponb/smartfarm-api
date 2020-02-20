@@ -11,7 +11,7 @@ const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
 const LINE_TOKEN = process.env.LINE_TOKEN;
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const uid = req.body.uid;
   const payload = req.body;
   const user = new userCollection(payload);

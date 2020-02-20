@@ -12,7 +12,7 @@ const DB_URL = process.env.DB_URL;
 const LINE_TOKEN = process.env.LINE_TOKEN;
 
 // get list of users
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res, next) => {
   const users = await userCollection.find();
   res.status(200).json(users);
 });
