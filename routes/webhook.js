@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 
+const userCollection = require("../models/user");
+const user = new userCollection();
+
 router.post("/", (req, res, next) => {
   //Create an instance
   const agent = new WebhookClient({
@@ -37,15 +40,27 @@ router.post("/", (req, res, next) => {
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
 
-    // dataCollection
-    //   .findOne({ uid: UID })
-    //   .exec()
-    //   .then(docs => {
-    //     dataCollection.save( { item: "book", qty: 40 } )
-    //   })
-    //   .catch(err => {
-
-    //   });
+    plantCollection
+      .findOne({
+        uid: req.body.originalDetectIntentRequest.payload.data.source.userId
+      })
+      .exec()
+      .then(docs => {
+        user.save({
+          report: [
+            {
+              farm: agent.parameters["farm"],
+              water: agent.parameters["water"],
+              height: agent.parameters["height"],
+              leaf: agent.parameters["leaf"]
+            }
+          ]
+        });
+        console.log("บันทึกข้อมูลสำเร็จ!");
+      })
+      .catch(err => {
+        console.log("บันทึกข้อมูลล้มเหลว!");
+      });
 
     agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
     agent.add(
