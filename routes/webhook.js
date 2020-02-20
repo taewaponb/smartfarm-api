@@ -40,7 +40,7 @@ router.post("/", (req, res, next) => {
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
 
-    plantCollection
+    userCollection
       .findOne({
         uid: req.body.originalDetectIntentRequest.payload.data.source.userId
       })
