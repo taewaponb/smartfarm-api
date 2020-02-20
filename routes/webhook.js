@@ -19,9 +19,7 @@ router.post("/", (req, res) => {
   // test webhook call
   function webhookTest(agent) {
     agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
-    let UID = data.originalDetectIntentRequest.payload.data.source.userId;
-    var data = JSON.parse(e.postData.contents);
-    console.log(UID);
+    console.log(req.body.originalDetectIntentRequest);
   }
 
   // submit function for plant report
