@@ -23,10 +23,15 @@ router.post("/", (req, res) => {
 
   // submit function for plant report
   function submit(agent) {
+    // get report data from dialogflow parameters.
     let farm = agent.parameters["farm"];
     let water = agent.parameters["water"];
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
+
+    let UID = data.originalDetectIntentRequest.payload.data.source.userId;
+
+    console.log(UID);
 
     agent.add(
       "ฟาร์มที่" +
