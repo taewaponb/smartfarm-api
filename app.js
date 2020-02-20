@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 
 // check if API is now working
 app.get('/', (req, res, next) => {
-  res.end(`API is working fine ✌️.`)
+  res.end(`API is working fine`)
   console.log('Someone trying to check that this API is working or not.');
 });
 
