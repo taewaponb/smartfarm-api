@@ -19,6 +19,9 @@ router.post("/", (req, res) => {
   // test webhook call
   function webhookTest(agent) {
     agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
+    let UID = data.originalDetectIntentRequest.payload.data.source.userId;
+    var data = JSON.parse(e.postData.contents);
+    console.log(UID);
   }
 
   // submit function for plant report
@@ -28,10 +31,6 @@ router.post("/", (req, res) => {
     let water = agent.parameters["water"];
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
-
-    let UID = data.originalDetectIntentRequest.payload.data.source.userId;
-
-    console.log(UID);
 
     agent.add(
       "ฟาร์มที่" +
