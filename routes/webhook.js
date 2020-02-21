@@ -3,7 +3,6 @@ const router = express.Router();
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 const userCollection = require("../models/user");
-const user = new userCollection();
 
 router.post("/", (req, res, next) => {
   //Create an instance
@@ -26,46 +25,47 @@ router.post("/", (req, res, next) => {
     if (data.source == undefined) {
       agent.add("Cannot get user LINE UID.");
     } else {
-      agent.add("User using bot from: " + data.source);
-      agent.add("User ID: " + data.payload.data.source.userId);
+      agent.add("User ID: " + data.payload.data.source.userId + "✨");
     }
   }
 
   // submit function for plant report
   function submit(agent) {
-    // define a variable to keep a data before submit
     let UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
     let farm = agent.parameters["farm"];
     let water = agent.parameters["water"];
     let height = agent.parameters["height"];
     let leaf = agent.parameters["leaf"];
 
+    // save a report data to database
     userCollection
-      .findOne({
-        uid: req.body.originalDetectIntentRequest.payload.data.source.userId
-      })
-      .exec()
-      .then(docs => {
-        user.save({
-          report: [
-            {
-              farm: agent.parameters["farm"],
-              water: agent.parameters["water"],
-              height: agent.parameters["height"],
-              leaf: agent.parameters["leaf"]
+      .updateOne(
+        { uid: UID },
+        {
+          $push: {
+            report: {
+              farm: farm,
+              water: water,
+              height: height,
+              leaf: leaf
             }
-          ]
-        });
-        console.log("บันทึกข้อมูลสำเร็จ!");
+          }
+        }
+      )
+      .then(docs => {
+        console.log("Report Saved!");
+        agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
+        agent.add(
+          'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
+        );
       })
       .catch(err => {
-        console.log("บันทึกข้อมูลล้มเหลว!");
+        console.log("Report Failed!");
+        agent.add("บันทึกผลไปยังฐานข้อมูลไม่สำเร็จค่ะ ❌");
+        agent.add(
+          'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
+        );
       });
-
-    agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
-    agent.add(
-      'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
-    );
   }
 
   // function will run when dialogflow intent match
