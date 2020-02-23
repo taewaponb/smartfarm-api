@@ -54,7 +54,7 @@ app.get('/', (req, res, next) => {
 
 // post every 29 minute to prevent heroku from sleeping.
 cron.schedule('*/29 * * * *', () => {
-  console.log('running a task every 29 minutes');
+  console.log('Running a task every 29 minutes');
   axios.get('https://line-smartfarm-api.herokuapp.com/');
 });
 

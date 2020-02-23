@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const dotenv = require("dotenv");
+const line = require("@line/bot-sdk");
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 const userCollection = require("../models/user");
+
+dotenv.config();
+const PORT = process.env.PORT;
+const DB_URL = process.env.DB_URL;
+const LINE_TOKEN = process.env.LINE_TOKEN;
 
 router.post("/", (req, res, next) => {
   //Create an instance
@@ -11,55 +18,48 @@ router.post("/", (req, res, next) => {
     response: res
   });
 
-  console.log("Body: ", req.body);
-  // console.log("agentVersion: " + agent.agentVersion);
-  // console.log("intent: " + agent.intent);
-  // console.log("locale: " + agent.locale);
-  // console.log("query: ", agent.query);
-  // console.log("session: ", agent.session);
+  // console.log("Body: ", req.body);
 
   // test webhook call
   function webhookTest(agent) {
     let data = req.body.originalDetectIntentRequest;
-    agent.add("Webhook is fine ✅ Thanks for asking 🤗 ");
+    agent.add("Webhook is fine ✅ Thanks for asking 🤗");
     if (data.source == undefined) {
-      agent.add("Cannot get user LINE UID.");
+      agent.add("Cannot get user LINE UID ❗️");
     } else {
       agent.add("User ID: " + data.payload.data.source.userId + "✨");
     }
   }
 
   // submit function for plant report
-  function submit(agent) {
-    let UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
-    let farm = agent.parameters["farm"];
-    let water = agent.parameters["water"];
-    let height = agent.parameters["height"];
-    let leaf = agent.parameters["leaf"];
-
+  async function submitData(agent) {
     // save a report data to database
-    userCollection
+    await userCollection
       .updateOne(
-        { uid: UID },
+        {
+          uid: req.body.originalDetectIntentRequest.payload.data.source.userId
+        },
         {
           $push: {
             report: {
-              farm: farm,
-              water: water,
-              height: height,
-              leaf: leaf
+              farm: agent.parameters["farm"],
+              water: agent.parameters["water"],
+              height: agent.parameters["height"],
+              leaf: agent.parameters["leaf"]
             }
           }
         }
       )
       .then(docs => {
+        console.log(docs);
         console.log("Report Saved!");
-        agent.add("บันทึกผลไปยังฐานข้อมูลเรียบร้อยค่ะ ✅");
+        agent.add("บันทึกผลไปยังฐานข้อมูลสำเร็จ ✅");
         agent.add(
           'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
         );
       })
       .catch(err => {
+        console.log(err);
         console.log("Report Failed!");
         agent.add("บันทึกผลไปยังฐานข้อมูลไม่สำเร็จค่ะ ❌");
         agent.add(
@@ -68,10 +68,97 @@ router.post("/", (req, res, next) => {
       });
   }
 
+  async function userCheck(agent) {
+    let UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
+    await userCollection
+      .find({
+        uid: UID
+      })
+      .exec()
+      .then(docs => {
+        const client = new line.Client({
+          channelAccessToken: LINE_TOKEN
+        });
+        if (docs == "") {
+          console.log("User not found!");
+          agent.add("ไม่พบไอดีผู้ใช้งานค่ะ ❌");
+          agent.add("โปรดทำการลงทะเบียนก่อนเริ่มใช้งานด้วยค่ะ 📋");
+        } else {
+          console.log("User found!");
+          agent.add("เลือกพืชที่ต้องการตามภาพเลยค่ะ 😁");
+          setTimeout(() => {
+            const message = [
+              {
+                type: "template",
+                altText: "this is a image carousel template",
+                template: {
+                  type: "image_carousel",
+                  columns: [
+                    {
+                      imageUrl: "https://i.imgur.com/yaQEs1s.png",
+                      action: {
+                        type: "message",
+                        label: "เลือก",
+                        text: "กรีนโอ๊ค (Green Oak)"
+                      }
+                    },
+                    {
+                      imageUrl: "https://i.imgur.com/vgzQopy.png",
+                      action: {
+                        type: "message",
+                        label: "เลือก",
+                        text: "เรดโอ๊ค (Red Oak)"
+                      }
+                    },
+                    {
+                      imageUrl: "https://i.imgur.com/DB5IqA1.png",
+                      action: {
+                        type: "message",
+                        label: "เลือก",
+                        text: "คะน้า (Chinese Kale)"
+                      }
+                    },
+                    {
+                      imageUrl: "https://i.imgur.com/9TQWqYc.png",
+                      action: {
+                        type: "message",
+                        label: "เลือก",
+                        text: "กะเพรา (Holy Basil)"
+                      }
+                    },
+                    {
+                      imageUrl: "https://i.imgur.com/Eq1oFwa.png",
+                      action: {
+                        type: "message",
+                        label: "เลือก",
+                        text: "ขึ้นฉ่าย (Celery)"
+                      }
+                    }
+                  ]
+                }
+              }
+            ];
+            client
+              .pushMessage(UID, message)
+              .then(() => {
+                console.log("Push message to" + UID + "is done. (Registered)");
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }, 50);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   // function will run when dialogflow intent match
   let intentMap = new Map();
   intentMap.set("Webhook", webhookTest);
-  intentMap.set("GOSFWHLY", submit);
+  intentMap.set("GOSFWHLY", submitData);
+  intentMap.set("PR", userCheck);
   agent.handleRequest(intentMap);
 });
 
