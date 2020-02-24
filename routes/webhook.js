@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
-const line = require("@line/bot-sdk");
-const axios = require("axios");
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 const userCollection = require("../models/user");
+const richmenu = require("../function/richMenu");
+const pushMessage = require("../function/pushMessage");
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -21,7 +21,7 @@ router.post("/", (req, res, next) => {
 
   // console.log("Body: ", req.body);
 
-  // test webhook call
+  // use to test if webhook is working.
   function webhookTest(agent) {
     let data = req.body.originalDetectIntentRequest;
     agent.add("Webhook is fine ✅ Thanks for asking 🤗");
@@ -32,9 +32,9 @@ router.post("/", (req, res, next) => {
     }
   }
 
-  // submit function for plant report
+  // submit function for plant report.
   async function submitData(agent) {
-    // save a report data to database
+    // save a report data to database.
     await userCollection
       .updateOne(
         {
@@ -69,90 +69,26 @@ router.post("/", (req, res, next) => {
       });
   }
 
+  // check for an unregistered user.
   async function userCheck(agent) {
-    let UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
+    const UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
+    // find user in database
     await userCollection
       .find({
         uid: UID
       })
       .exec()
       .then(docs => {
-        const client = new line.Client({
-          channelAccessToken: LINE_TOKEN
-        });
         if (docs == "") {
-          // axios.get("https://api.line.me/v2/bot/richmenu/list", {
-          //   headers: { Authorization: `Bearer ${LINE_TOKEN}` }
-          // }).then(res => {
-          //   console.log(res.data);
-          // });
           console.log("User not found!");
           agent.add("ไม่พบไอดีผู้ใช้งานค่ะ ❌");
           agent.add("สามารถกดที่เมนูด้านล่างเพื่อลงทะเบียนได้เลยค่ะ 📋");
-          
+          richmenu.changeMenu("register", UID); // using richmenu function to change user richmenu.
         } else {
           console.log("User found!");
           agent.add("เลือกพืชที่ต้องการตามภาพเลยค่ะ 😁");
           setTimeout(() => {
-            const message = [
-              {
-                type: "template",
-                altText: "this is a image carousel template",
-                template: {
-                  type: "image_carousel",
-                  columns: [
-                    {
-                      imageUrl: "https://i.imgur.com/yaQEs1s.png",
-                      action: {
-                        type: "message",
-                        label: "เลือก",
-                        text: "กรีนโอ๊ค (Green Oak)"
-                      }
-                    },
-                    {
-                      imageUrl: "https://i.imgur.com/vgzQopy.png",
-                      action: {
-                        type: "message",
-                        label: "เลือก",
-                        text: "เรดโอ๊ค (Red Oak)"
-                      }
-                    },
-                    {
-                      imageUrl: "https://i.imgur.com/DB5IqA1.png",
-                      action: {
-                        type: "message",
-                        label: "เลือก",
-                        text: "คะน้า (Chinese Kale)"
-                      }
-                    },
-                    {
-                      imageUrl: "https://i.imgur.com/9TQWqYc.png",
-                      action: {
-                        type: "message",
-                        label: "เลือก",
-                        text: "กะเพรา (Holy Basil)"
-                      }
-                    },
-                    {
-                      imageUrl: "https://i.imgur.com/Eq1oFwa.png",
-                      action: {
-                        type: "message",
-                        label: "เลือก",
-                        text: "ขึ้นฉ่าย (Celery)"
-                      }
-                    }
-                  ]
-                }
-              }
-            ];
-            client
-              .pushMessage(UID, message)
-              .then(() => {
-                console.log("Push message to" + UID + "is done. (Registered)");
-              })
-              .catch(err => {
-                console.log(err);
-              });
+            pushMessage.state("verified", UID); // using pushMessage function to send a messages.
           }, 50);
         }
       })
