@@ -25,10 +25,10 @@ module.exports = {
         }
       ];
       client
-        .pushMessage(req.body.uid, message)
+        .pushMessage(UID, message)
         .then(() => {
           console.log(
-            "Push message to" + req.body.uid + "is done. (Registered)"
+            "Push message to" + UID + "is done. (Registered)"
           );
         })
         .catch(err => {
@@ -47,10 +47,10 @@ module.exports = {
         }
       ];
       client
-        .pushMessage(req.body.uid, message)
+        .pushMessage(UID, message)
         .then(() => {
           console.log(
-            "Push message to" + req.body.uid + "is done. (Duplicated)"
+            "Push message to" + UID + "is done. (Duplicated)"
           );
         })
         .catch(err => {
