@@ -8,7 +8,7 @@ const LINE_TOKEN = process.env.LINE_TOKEN;
 
 // this function will push the message to user.
 module.exports = {
-  state: function(state, UID) {
+  state: function(state, UID, name) {
     const client = new line.Client({
       channelAccessToken: LINE_TOKEN
     });
@@ -16,7 +16,7 @@ module.exports = {
       const message = [
         {
           type: "text",
-          text: "สวัสดีค่ะคุณ " + req.body.name + "✨"
+          text: "สวัสดีค่ะคุณ" + name + "✨"
         },
         {
           type: "text",

@@ -34,7 +34,7 @@ router.post("/", (req, res, next) => {
           .save()
           .then(result => {
             // console.log(result);
-            pushMessage.state("registered", UID);
+            pushMessage.state("registered", UID, req.body.name);
             richmenu.changeMenu("mainmenu", UID);
             res.status(201).send("Register Success!");
           })
