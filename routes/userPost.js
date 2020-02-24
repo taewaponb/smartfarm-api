@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const line = require("@line/bot-sdk");
 const router = express.Router();
+const axios = require("axios");
 
 const userCollection = require("../models/user");
 
@@ -18,7 +19,7 @@ router.post("/", (req, res, next) => {
 
   // check for blank line uid
   if (uid === null || uid === "") {
-    res.status(400).send('LINE UID not found! Please enter LINE UID.');
+    res.status(400).send("LINE UID not found! Please enter LINE UID.");
     return null;
   }
 
@@ -42,7 +43,7 @@ router.post("/", (req, res, next) => {
       } else {
         pushMessage("duplicated");
         console.log("Duplicated UID detected!");
-        res.status(400).send("Register Failed! (Duplicated UID)")
+        res.status(400).send("Register Failed! (Duplicated UID)");
       }
     })
     .catch(err => {
@@ -69,12 +70,15 @@ router.post("/", (req, res, next) => {
       client
         .pushMessage(req.body.uid, message)
         .then(() => {
-          console.log("Push message to" + req.body.uid + "is done. (Registered)");
+          console.log(
+            "Push message to" + req.body.uid + "is done. (Registered)"
+          );
         })
         .catch(err => {
           console.log(err);
         });
     } else if (state == "duplicated") {
+      richmenuChange();
       const message = [
         {
           type: "text",
@@ -89,12 +93,31 @@ router.post("/", (req, res, next) => {
       client
         .pushMessage(req.body.uid, message)
         .then(() => {
-          console.log("Push message to" + req.body.uid + "is done. (Duplicated)");
+          console.log(
+            "Push message to" + req.body.uid + "is done. (Duplicated)"
+          );
         })
         .catch(err => {
           console.log(err);
         });
     }
+  }
+
+  function richmenuChange() {
+    let mainmenu = "richmenu-8660a8cdc168e27917e8b63c35e26cc8";
+    axios
+      .post(
+        "https://api.line.me/v2/bot/user/" +
+          req.body.uid +
+          "/richmenu/" +
+          mainmenu,
+        {
+          headers: { Authorization: `Bearer ${LINE_TOKEN}` }
+        }
+      )
+      .then(res => {
+        console.log("richmenu has changed!");
+      });
   }
 });
 

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const line = require("@line/bot-sdk");
+const axios = require("axios");
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 const userCollection = require("../models/user");
@@ -80,9 +81,15 @@ router.post("/", (req, res, next) => {
           channelAccessToken: LINE_TOKEN
         });
         if (docs == "") {
+          // axios.get("https://api.line.me/v2/bot/richmenu/list", {
+          //   headers: { Authorization: `Bearer ${LINE_TOKEN}` }
+          // }).then(res => {
+          //   console.log(res.data);
+          // });
           console.log("User not found!");
           agent.add("ไม่พบไอดีผู้ใช้งานค่ะ ❌");
-          agent.add("โปรดทำการลงทะเบียนก่อนเริ่มใช้งานด้วยค่ะ 📋");
+          agent.add("สามารถกดที่เมนูด้านล่างเพื่อลงทะเบียนได้เลยค่ะ 📋");
+          
         } else {
           console.log("User found!");
           agent.add("เลือกพืชที่ต้องการตามภาพเลยค่ะ 😁");
