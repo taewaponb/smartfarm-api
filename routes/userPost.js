@@ -25,7 +25,7 @@ router.post("/", (req, res, next) => {
 
   // check if account is exists
   userCollection
-    .find({ uid: req.body.uid })
+    .find({ uid: UID })
     .exec()
     .then(docs => {
       if (docs == "") {

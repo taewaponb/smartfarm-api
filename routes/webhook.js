@@ -82,14 +82,12 @@ router.post("/", (req, res, next) => {
         if (docs == "") {
           console.log("User not found!");
           agent.add("ไม่พบไอดีผู้ใช้งานค่ะ ❌");
-          agent.add("สามารถกดที่เมนูด้านล่างเพื่อลงทะเบียนได้เลยค่ะ 📋");
+          agent.add("สามารถกดที่เมนูด้านล่างเพื่อลงทะเบียนได้เลยค่ะ 👇📋");
           richmenu.changeMenu("register", UID); // using richmenu function to change user richmenu.
         } else {
           console.log("User found!");
           agent.add("เลือกพืชที่ต้องการตามภาพเลยค่ะ 😁");
-          setTimeout(() => {
-            pushMessage.state("verified", UID); // using pushMessage function to send a messages.
-          }, 50);
+          pushMessage.state("verified", UID); // using pushMessage function to send a messages.
         }
       })
       .catch(err => {
