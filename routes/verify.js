@@ -6,13 +6,14 @@ const pushMessage = require("../function/pushMessage");
 const richmenu = require("../function/richMenu");
 
 router.post("/", (req, res) => {
-  userCollection.find({ uid: req.body.uid }, function(err, docs) {
+  const UID = req.body.uid;
+  userCollection.find({ uid: UID }, function(err, docs) {
     if ((docs == "") | (docs == null)) {
       console.log("New UID detected!");
-      res.status(200).send("true");
+      res.status(200).send("This user can register.");
     } else {
       console.log("Duplicated UID detected!");
-      res.status(401).send("false");
+      res.status(401).send("This user can not register.");
       pushMessage.state("duplicated", UID);
       richmenu.changeMenu("mainmenu", UID);
     }
