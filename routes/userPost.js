@@ -78,7 +78,22 @@ router.post("/", (req, res, next) => {
           console.log(err);
         });
     } else if (state == "duplicated") {
-      richmenuChange();
+
+      let mainmenu = "richmenu-8660a8cdc168e27917e8b63c35e26cc8";
+      axios
+        .post(
+          "https://api.line.me/v2/bot/user/" +
+            req.body.uid +
+            "/richmenu/" +
+            mainmenu,
+          {
+            headers: { Authorization: `Bearer ${LINE_TOKEN}` }
+          }
+        )
+        .then(res => {
+          console.log("richmenu has changed!");
+        });
+        
       const message = [
         {
           type: "text",
