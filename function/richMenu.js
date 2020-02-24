@@ -9,7 +9,8 @@ const LINE_TOKEN = process.env.LINE_TOKEN;
 // this function will change richmenu for registered user.
 module.exports = {
   changeMenu: function(menu, UID) {
-    let mainmenu = "richmenu-8660a8cdc168e27917e8b63c35e26cc8";
+    let oldmenu = "richmenu-8660a8cdc168e27917e8b63c35e26cc8";
+    let mainmenu = "richmenu-64e47c5230e041877f803884ac6e1ad3";
     if (menu == "register") {
       axios({
         method: "delete",

@@ -14,6 +14,7 @@ const LINE_TOKEN = process.env.LINE_TOKEN;
 
 router.post("/", (req, res, next) => {
   const UID = req.body.uid;
+  const NAME = req.body.name;
   const payload = req.body;
   const user = new userCollection(payload);
 
@@ -34,7 +35,7 @@ router.post("/", (req, res, next) => {
           .save()
           .then(result => {
             // console.log(result);
-            pushMessage.state("registered", UID, req.body.name);
+            pushMessage.state("registered", UID, NAME);
             richmenu.changeMenu("mainmenu", UID);
             res.status(201).send("Register Success!");
           })

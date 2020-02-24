@@ -16,7 +16,7 @@ module.exports = {
       const message = [
         {
           type: "text",
-          text: "สวัสดีค่ะคุณ" + name + "✨"
+          text: "สวัสดีค่ะคุณ" + name + " ✨"
         },
         {
           type: "text",
