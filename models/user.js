@@ -9,6 +9,7 @@ const userSchema = new Schema(
     tel: String,
     report: [
       {
+        plant: String,
         farm: Number,
         water: String,
         height: Number,

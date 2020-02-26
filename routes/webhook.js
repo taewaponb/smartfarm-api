@@ -43,6 +43,7 @@ router.post("/", (req, res, next) => {
         {
           $push: {
             report: {
+              plant: agent.parameters["plant"],
               farm: agent.parameters["farm"],
               water: agent.parameters["water"],
               height: agent.parameters["height"],
