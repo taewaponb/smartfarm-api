@@ -98,9 +98,13 @@ router.post("/", (req, res, next) => {
 
   // function will run when dialogflow intent match
   let intentMap = new Map();
+  intentMap.set("PR", userCheck);
   intentMap.set("Webhook", webhookTest);
   intentMap.set("GOSFWHLY", submitData);
-  intentMap.set("PR", userCheck);
+  intentMap.set("HBSFWHLY", submitData);
+  intentMap.set("CKSFWHLY", submitData);
+  intentMap.set("ROSFWHLY", submitData);
+  intentMap.set("CLSFWHLY", submitData);
   agent.handleRequest(intentMap);
 });
 
