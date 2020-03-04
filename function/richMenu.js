@@ -21,8 +21,8 @@ module.exports = {
           console.log("richmenu has changed to register!");
         })
         .catch(err => {
-          // console.log(err);
-          console.log("failed to changed to register!");
+          // console.error(err);
+          console.error("failed to changed to register!");
         });
     } else if (menu == "mainmenu") {
       axios({
@@ -35,8 +35,8 @@ module.exports = {
           console.log("richmenu has changed to mainmenu!");
         })
         .catch(err => {
-          // console.log(err);
-          console.log("failed to changed to mainmenu!");
+          // console.error(err);
+          console.error("failed to changed to mainmenu!");
         });
     }
     return(menu);

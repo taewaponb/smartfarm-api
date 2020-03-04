@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
       console.log("New UID detected!");
       res.status(200).send("This user can register.");
     } else {
-      console.log("Duplicated UID detected!");
+      console.error("Duplicated UID detected!");
       res.status(401).send("This user can not register.");
       pushMessage.state("duplicated", UID);
       richmenu.changeMenu("mainmenu", UID);

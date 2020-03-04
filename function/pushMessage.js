@@ -32,7 +32,7 @@ module.exports = {
           );
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     } else if (state == "duplicated") {
       const message = [
@@ -54,7 +54,7 @@ module.exports = {
           );
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     } else if (state == "verified") {
       let message = [
@@ -114,7 +114,7 @@ module.exports = {
           console.log("Push message to" + UID + "is done. (Verified)");
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     }
     return state;
