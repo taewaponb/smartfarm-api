@@ -13,6 +13,7 @@ const DB_URL = process.env.DB_URL;
 const LINE_TOKEN = process.env.LINE_TOKEN;
 
 router.post("/", (req, res, next) => {
+
   //Create an instance
   const agent = new WebhookClient({
     request: req,
@@ -34,6 +35,8 @@ router.post("/", (req, res, next) => {
 
   // submit function for plant report.
   async function submitData(agent) {
+    console.log("entering submit function...");
+    const UID = req.body.originalDetectIntentRequest.payload.data.source.userId;
     // save a report data to database.
     await userCollection
       .updateOne(
@@ -55,18 +58,14 @@ router.post("/", (req, res, next) => {
       .then(docs => {
         console.log(docs);
         console.log("Report Saved!");
-        agent.add("บันทึกผลไปยังฐานข้อมูลสำเร็จ ✅");
-        agent.add(
-          'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
-        );
+        // agent.add("บันทึกผลไปยังฐานข้อมูลสำเร็จ ✅");
+        pushMessage.state("confirmed", UID);
       })
       .catch(err => {
         console.log(err);
         console.log("Report Failed!");
         agent.add("บันทึกผลไปยังฐานข้อมูลไม่สำเร็จค่ะ ❌");
-        agent.add(
-          'หากต้องการรายงานผลเพิ่มเติม 📋 \nกดที่เมนู "รายงานผลการเพาะปลูก" หรือพิมพ์ "รายงานผล" ได้เลยค่ะ ✨'
-        );
+        agent.add("เกิดความผิดพลาดของระบบ โปรดลองใหม่ภายหลังค่ะ");
       });
   }
 
@@ -101,10 +100,11 @@ router.post("/", (req, res, next) => {
   intentMap.set("PR", userCheck);
   intentMap.set("Webhook", webhookTest);
   intentMap.set("GOSFWHLY", submitData);
-  intentMap.set("HBSFWHLY", submitData);
-  intentMap.set("CKSFWHLY", submitData);
-  intentMap.set("ROSFWHLY", submitData);
-  intentMap.set("CLSFWHLY", submitData);
+  // will uncomment later.
+  // intentMap.set("HBSFWHLY", submitData);
+  // intentMap.set("CKSFWHLY", submitData);
+  // intentMap.set("ROSFWHLY", submitData);
+  // intentMap.set("CLSFWHLY", submitData);
   agent.handleRequest(intentMap);
 });
 

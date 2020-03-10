@@ -27,9 +27,7 @@ module.exports = {
       client
         .pushMessage(UID, message)
         .then(() => {
-          console.log(
-            "Push message to" + UID + "is done. (Registered)"
-          );
+          console.log("Push message to" + UID + "is done. (Registered)");
         })
         .catch(err => {
           console.error(err);
@@ -49,9 +47,7 @@ module.exports = {
       client
         .pushMessage(UID, message)
         .then(() => {
-          console.log(
-            "Push message to" + UID + "is done. (Duplicated)"
-          );
+          console.log("Push message to" + UID + "is done. (Duplicated)");
         })
         .catch(err => {
           console.error(err);
@@ -60,7 +56,7 @@ module.exports = {
       let message = [
         {
           type: "template",
-          altText: "this is a image carousel template",
+          altText: "เลือกพืชที่ต้องการตามภาพเลยค่ะ 😁",
           template: {
             type: "image_carousel",
             columns: [
@@ -112,6 +108,47 @@ module.exports = {
         .pushMessage(UID, message)
         .then(() => {
           console.log("Push message to" + UID + "is done. (Verified)");
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else if (state == "confirmed") {
+      let message = [
+        {
+          type: "text",
+          text: "บันทึกผลไปยังฐานข้อมูลสำเร็จ ✅"
+        },
+        {
+          quickReply: {
+            items: [
+              {
+                action: {
+                  type: "message",
+                  label: "ต้องการ",
+                  text: "รายงานผลพืชชนิดอื่น"
+                },
+                type: "action",
+                imageUrl: "https://i.imgur.com/Upssluj.png"
+              },
+              {
+                action: {
+                  type: "message",
+                  label: "ไม่ต้องการ",
+                  text: "สิ้นสุดการรายงานผล"
+                },
+                type: "action",
+                imageUrl: "https://i.imgur.com/mcDeC43.png/"
+              }
+            ]
+          },
+          type: "text",
+          text: "ต้องการรายงานผลพืชชนิดอื่นหรือไม่?"
+        }
+      ];
+      client
+        .pushMessage(UID, message)
+        .then(() => {
+          console.log("Push message to" + UID + "is done. (Confirmed)");
         })
         .catch(err => {
           console.error(err);
