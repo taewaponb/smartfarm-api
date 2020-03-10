@@ -23,7 +23,7 @@ router.get("/:uid", async (req, res, next) => {
   await userCollection.findOne({ uid: UID })
   .then(docs => {
     if (docs == "" | docs == null) {
-      res.status(404).end("UID Not found!");
+      res.status(401).send("User not found!");
     } else {
       res.status(200).json(docs);
     }
