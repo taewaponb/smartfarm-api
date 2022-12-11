@@ -16,7 +16,7 @@
         "axios": "^0.19.2",
         "dialogflow-fulfillment": "^0.6.1",
         "dotenv": "^8.2.0",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "mongoose": "^5.8.4",
         "morgan": "^1.9.1",
         "node-cron": "^2.0.3",
